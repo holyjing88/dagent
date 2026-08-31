@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="GBK" standalone="yes" ?>
+
+<tagentconf __version="1">
+
+    <!--DEFAULT VALUE: '127.0.0.1:8899'-->
+    <master>192.168.75.128:8899</master>
+    <slave>192.168.75.128:8899</slave>
+
+    <!--DEFAULT VALUE: 'lib'-->
+    <lib>../lib</lib>
+
+    <!--DEFAULT VALUE: 'cfg'-->
+    <cfg>../cfg</cfg>
+
+    <!--DEFAULT VALUE: '500000.000000'-->
+    <tick>500000.000000</tick>
+
+</tagentconf>

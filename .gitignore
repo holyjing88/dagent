@@ -1,0 +1,40 @@
+# ---- 编译中间文件 ----
+*.o
+*.obj
+*.os
+*.gcno
+*.gcda
+*.gcov
+*.d
+*.dblite
+.sconsign*
+
+# ---- 日志文件 ----
+*.log
+*.error
+*.bill
+log/
+
+# ---- tbus 运行时 ----
+tbus.log
+tbus_channels_*.bak
+
+# ---- tapp 运行时生成 ----
+*_rundata_timer.xml
+*_tagents.xml
+
+# ---- Office/Word 临时文件 ----
+~$*
+
+# ---- tcmcenter 运行时生成 ----
+tools/tests/dcm/tcmcenter/conf/
+tools/tests/dcm/tcmcenter/bin/tcm_bak/
+tools/tests/dcm/tcmcenter/tcm_water_log/
+
+# ---- release 运行时 ----
+release/log/
+release/TbusWorkDir/
+
+# ---- Python ----
+__pycache__/
+*.pyc

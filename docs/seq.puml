@@ -1,0 +1,36 @@
+﻿@startuml
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontName "Microsoft YaHei"
+skinparam defaultFontSize 12
+skinparam sequenceMessageAlign center
+
+title 进程启停控制流（下行）与状态上报（上行）
+
+actor "运维人员" as op
+participant "tcmconsole\n运维控制台" as console
+participant "tconnd\n接入服务" as tconnd
+participant "tcmcenter\n配置管理中心" as center
+participant "tcenterd\n中心守护" as centerd
+participant "dmltagent\n主机代理" as agent
+participant "mod_procmng\n进程管理插件" as procmng
+participant "业务进程\nbusAgent" as proc
+
+op -> console : 下发启动/停止/检查命令
+console -> tconnd : 转发控制命令
+tconnd -> center : 转发 (tbus)
+center -> centerd : 下发控制指令 (centerdapi)
+centerd -> agent : 透传 (tagent_centerd_proto/TCP)
+agent -> procmng : 按 appid 分发 (recv)
+procmng -> proc : 执行 start/stop/check
+
+proc --> procmng : 进程状态
+procmng --> agent : 结果回包 (send)
+agent --> centerd : 上行 (TCP)
+centerd --> center : 上行 (centerdapi)
+center --> tconnd : 结果回传
+tconnd --> console : 结果回传
+console --> op : 展示操作结果
+
+@enduml

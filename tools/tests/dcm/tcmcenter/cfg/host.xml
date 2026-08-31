@@ -1,0 +1,19 @@
+<tcmcenter>
+    <!--
+    4)ҵ��ϵͳ��������:�뽫ҵ��ϵͳ�õ��������������������,IsVirtualĬ��Ϊ0��IsVirtual=1��ʾ������Ϊ��������
+    -->
+    <HostTab >
+        <Host Name="Host1" InnerIP="192.168.75.128" >
+        </Host>
+
+        <Host Name="vHostImonster1" IsVirtual="1" InnerIP="172.25.40.101" >
+        </Host>
+
+        <Host Name="vHostImonster2" IsVirtual="1" InnerIP="172.25.40.102" >
+        </Host>
+
+        <Host Name="vHostImonster3" IsVirtual="1" InnerIP="172.25.40.103" >
+        </Host>
+
+    </HostTab>
+</tcmcenter>

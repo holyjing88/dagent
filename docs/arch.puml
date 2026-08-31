@@ -1,0 +1,63 @@
+﻿@startuml
+!theme plain
+skinparam componentStyle rectangle
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontName "Microsoft YaHei"
+skinparam defaultFontSize 13
+skinparam packageStyle rectangle
+skinparam ArrowColor #555555
+skinparam component {
+  BackgroundColor #EAF2FB
+  BorderColor #2E6DA4
+  FontColor #1a1a1a
+}
+
+title 业务架构图：Agent(dmltagent) 与其他服务器
+
+package "管理层" #FFF6E5 {
+  component "tcmconsole\n运维控制台" as console #FFE0A3
+  component "tconnd\n连接接入服务" as tconnd #FFE0A3
+}
+
+package "控制中心" #E8F5E9 {
+  component "tcmcenter\n配置管理中心\n(Master)" as center #C8E6C9
+  component "tcenterd\n中心守护·消息路由\n(Master/Slave)" as centerd #C8E6C9
+}
+
+package "业务主机" #FDEBEC {
+  component "dmltagent / tagent\n主机代理 Agent" as agent #F8BBD0
+  package "插件 mod_*.so" #FFF3E0 {
+    component "mod_procmng\n进程启停/检查\n自动拉起/文件传输" as m_procmng
+    component "mod_tbusconfig\ntbus 配置刷新" as m_busconf
+    component "mod_collect\n数据采集" as m_collect
+  }
+  component "业务进程\n(busAgent)" as proc #FFCC80
+}
+
+component "tbusmgr\ntbus 管理工具\n(初始化 GCIM 共享内存)" as tbusmgr #E0E0E0
+
+console --> tconnd : 控制命令
+tconnd <--> center : tbus
+center <--> centerd : centerdapi / tbus
+centerd <--> agent : tagent_centerd_proto / TCP\n(master/slave ip:8899)
+agent ..> m_procmng : dlopen 加载
+agent ..> m_busconf : dlopen 加载
+agent ..> m_collect : dlopen 加载
+agent <--> proc : agent_api / 共享内存 Exchange
+tbusmgr ..> center : 初始化 GCIM
+tbusmgr ..> centerd : 初始化 GCIM
+tbusmgr ..> tconnd : 初始化 GCIM
+
+legend right
+  | 图例 |
+  <--> 双向消息/数据流
+  -->  单向控制/命令流
+  ..>  加载/初始化
+  | 说明 |
+  Agent 仅经 TCP 连接 tcenterd；
+  与业务进程经共享内存交互；
+  tbusd(跨机中继) 不在 Agent 通信路径上
+endlegend
+
+@enduml

@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="GBK" standalone="yes" ?>
+<metalib tagsetversion="1" name="tagent_centerd_proto" version="1" >
+	<macro name="TAGENT_MSG_MAGIC" value="34969" />
+	<macro name="TAGENT_HSOT_NAME_LEN" value="128" />
+	<macro name="TCENTERD_MAX_AGENTS" value="20000" />
+	<macro name="TCENTERD_MAX_SNAPSHOT" value="16" />
+	<macro name="TCENTERD_CONN_AGENT" value="32" />
+	<macro name="TCENTERD_MAX_BUSNISSID_PER_PACK" value="500" />
+	<macro name="TCENTER_AGENT_CONF_ETH_COUNT" value="4" />
+	<macro name="TAGENT_FILE_NAME_LEN" value="4096" />
+	<macro name="TAGENT_FILE_SEG_SIZE" value="40960" />
+	<macrosgroup name="TAGENTMSGCMD" >
+		<macro name="TAGENT_ID_MSG_HELLO" value="0" />
+		<macro name="TAGENT_ID_MSG_AGENTREGISTER" value="1" />
+		<macro name="TAGENT_ID_MSG_MASTEREGISTER" value="2" />
+		<macro name="TAGENT_ID_MSG_CENTERDCASCADE" value="3" />
+		<macro name="TAGENT_ID_MSG_LOCATIONREQ" value="4" />
+		<macro name="TAGENT_ID_MSG_LOCATIONRES" value="5" />
+		<macro name="TAGENT_ID_MSG_SNAPSHOTREPORT" value="6" />
+		<macro name="TAGENT_ID_MSG_AGENTREGISTER_NEW" value="7" />
+		<macro name="TAGENT_ID_MSG_FILEUPDATE" value="10" />
+		<macro name="TAGENT_ID_MSG_FILEREQUEST" value="11" />
+		<macro name="TAGENT_ID_MSG_FILEPUSH" value="12" />
+		<macro name="TAGENT_ID_MSG_FILEREPORT" value="13" />
+		<macro name="TAGENT_ID_MSG_PASS" value="204" />
+		<macro name="TAGENT_ID_MSG_INNERMNG" value="238" />
+		<macro name="TAGENT_ID_MSG_CHROMO" value="255" />
+		<macro name="TAGENT_ID_MSG_MOD_ADD_REQ" value="4080" />
+		<macro name="TAGENT_ID_MSG_MOD_ADD_RES" value="4081" />
+		<macro name="TAGENT_ID_MSG_MOD_DEL_REQ" value="4082" />
+		<macro name="TAGENT_ID_MSG_MOD_DEL_RES" value="4083" />
+		<macro name="TAGENT_ID_MSG_MOD_LIST_REQ" value="4084" />
+		<macro name="TAGENT_ID_MSG_MOD_LIST_RES" value="4085" />
+		<macro name="TAGENT_ID_MSG_PING" value="4086" />
+		<macro name="TAGENT_ID_MSG_PONG" value="4087" />
+		<macro name="TAGENT_ID_MSG_LIST_AGENT_REQ" value="4088" />
+		<macro name="TAGENT_ID_MSG_LIST_AGENT_RES" value="4089" />
+		<macro name="TAGENT_ID_MSG_TRANSFER" value="65520" />
+	</macrosgroup>
+	<macrosgroup name="TAGENTRES" >
+		<macro name="ERROR_FILE_POSITION" value="-50" />
+		<macro name="ERROR_FILE_NOEXIST" value="-49" />
+		<macro name="ERROR_LOGIC" value="-33" />
+		<macro name="ERROR_BUS_NODATA" value="-17" />
+		<macro name="ERROR_SIZE_ERROR" value="-3" />
+		<macro name="ERROR_HEAD_ERROR" value="-2" />
+		<macro name="ERROR_NET_ERROR" value="-1" />
+	</macrosgroup>
+	<macrosgroup name="TAGENTCMD" >
+		<macro name="ID_CMD_DISPATCH" value="0" desc="" />
+		<macro name="ID_CMD_UP" value="1" desc="" />
+		<macro name="ID_CMD_DOWN" value="2" desc="" />
+	</macrosgroup>
+
+	<struct name="tagentpkghead" version="0" >
+		<entry name="len" type="ushort" />
+		<entry name="msgCmd" type="ushort" bindmacrosgroup="TAGENTMSGCMD" />
+		<entry name="appid" type="uint" />
+		<entry name="busid" type="uint" />
+		<entry name="msgVer" type="uchar" />
+		<entry name="type" type="uchar" bindmacrosgroup="TAGENTCMD" />
+		<entry name="magic" type="ushort" />
+		<entry name="SourceIP" type="ip" />
+		<entry name="DestIP" type="ip" />
+	</struct>
+
+	<struct name="tagentprotoipconfig" version="0" >
+		<entry name="HostNameLen" type="ushort" />
+		<entry name="HostName" type="char" count="TAGENT_HSOT_NAME_LEN" refer="HostNameLen" />
+		<entry name="net" type="uchar" />
+		<entry name="netdevice" type="uint" count="8" refer="net" />
+	</struct>
+
+	<struct name="tagentprotolocationres" version="0" >
+		<entry name="master" type="ip" />
+		<entry name="slave" type="ip" />
+	</struct>
+
+	<struct name="tagentprotoinnermng" version="0" >
+		<entry name="appid" type="uint" />
+		<entry name="dst" type="uint" />
+		<entry name="len" type="ushort" />
+		<entry name="fileName" type="char" count="80" refer="len" />
+	</struct>
+
+	<struct name="AppInfo" version="0" >
+		<entry name="Appid" type="uint" />
+		<entry name="Busid" type="uint" />
+	</struct>
+
+	<struct name="tagentipcf" version="0" >
+		<entry name="Hostname" type="string" size="32" />
+		<entry name="EthConn" type="string" size="16" />
+		<entry name="Count" type="int" />
+		<entry name="EthList" type="string" count="TCENTER_AGENT_CONF_ETH_COUNT" size="16" refer="Count" />
+	</struct>
+
+	<struct name="tagent" version="0" >
+		<entry name="tagentipcf" type="tagentipcf" />
+		<entry name="Count" type="int" />
+		<entry name="appInfo" type="AppInfo" count="TCENTERD_CONN_AGENT" refer="Count" />
+		<entry name="msgVer" type="tinyuint" />
+	</struct>
+
+	<struct name="tagents" version="0" >
+		<entry name="Count" type="int" />
+		<entry name="tagent" type="tagent" count="TCENTERD_MAX_AGENTS" refer="Count" />
+	</struct>
+
+	<struct name="snapshot" version="0" >
+		<entry name="Cid" type="uint" />
+		<entry name="Count" type="int" />
+		<entry name="tagent" type="tagent" count="TCENTERD_MAX_SNAPSHOT" refer="Count" />
+	</struct>
+
+	<struct name="AppInfos" version="0" >
+		<entry name="count" type="uint" />
+		<entry name="InfoList" type="AppInfo" count="TCENTERD_MAX_BUSNISSID_PER_PACK" refer="count" />
+	</struct>
+
+	<struct name="CascadeInfo" version="0" >
+		<entry name="fNode" type="ip" />
+		<entry name="cNode" type="ip" />
+	</struct>
+
+	<struct name="createfilereq" version="0" >
+		<entry name="md5" type="char" count="16" />
+		<entry name="len" type="ushort" />
+		<entry name="fileName" type="char" count="TAGENT_FILE_NAME_LEN" refer="len" />
+		<entry name="fileLen" type="uint" />
+	</struct>
+
+	<struct name="filerequest" version="0" >
+		<entry name="fileOffset" type="uint" />
+		<entry name="len" type="ushort" />
+		<entry name="fileName" type="char" count="TAGENT_FILE_NAME_LEN" refer="len" />
+	</struct>
+
+	<struct name="filepush" version="0" >
+		<entry name="fileOffset" type="uint" />
+		<entry name="len" type="ushort" />
+		<entry name="fileName" type="char" count="TAGENT_FILE_NAME_LEN" refer="len" />
+		<entry name="segSize" type="ushort" />
+		<entry name="buff" type="char" count="TAGENT_FILE_SEG_SIZE" refer="segSize" />
+	</struct>
+
+	<struct name="fileReport" version="0" >
+		<entry name="md5" type="char" count="16" />
+		<entry name="len" type="ushort" />
+		<entry name="fileName" type="char" count="TAGENT_FILE_NAME_LEN" refer="len" />
+		<entry name="result" type="short" bindmacrosgroup="TAGENTRES" />
+	</struct>
+
+	<struct name="tagentbuffer" version="0" >
+		<entry name="len" type="uint" />
+		<entry name="buff" type="char" count="40960" refer="len" />
+	</struct>
+
+	<struct name="tagentmodaddreq" version="1" >
+		<entry name="count" type="int" />
+		<entry name="name" type="string" count="32" size="TAGENT_FILE_NAME_LEN" refer="count" />
+	</struct>
+
+	<struct name="tagentmoddelreq" version="1" >
+		<entry name="count" type="int" />
+		<entry name="name" type="string" count="32" size="TAGENT_FILE_NAME_LEN" refer="count" />
+	</struct>
+
+	<struct name="tagentModInfo" version="1" >
+		<entry name="name" type="string" size="128" />
+		<entry name="version" type="string" size="128" />
+		<entry name="appid" type="uint" />
+	</struct>
+
+	<struct name="tagentmodlistres" version="1" >
+		<entry name="count" type="int" />
+		<entry name="infoList" type="tagentModInfo" count="128" refer="count" />
+	</struct>
+
+	<struct name="tagentInfo" version="1" >
+		<entry name="ip" type="ip" />
+	</struct>
+
+	<struct name="listAgentRes" version="1" >
+		<entry name="SessionId" type="uint" />
+		<entry name="TotalNum" type="uint" />
+		<entry name="Offset" type="uint" />
+		<entry name="Count" type="uint" />
+		<entry name="Agent" type="tagentInfo" count="256" refer="Count" />
+	</struct>
+
+	<union name="tagentcenterdmsgbody" version="0" >
+		<entry name="transmit" type="tagentbuffer" />
+		<entry name="helloReq" type="tagentprotoipconfig" id="TAGENT_ID_MSG_HELLO" />
+		<entry name="masterRegister" type="uint" id="TAGENT_ID_MSG_MASTEREGISTER" />
+		<entry name="CenterdCascade" type="CascadeInfo" id="TAGENT_ID_MSG_CENTERDCASCADE" />
+		<entry name="locationRes" type="tagentprotolocationres" id="TAGENT_ID_MSG_LOCATIONRES" />
+		<entry name="SnapShotReport" type="snapshot" id="TAGENT_ID_MSG_SNAPSHOTREPORT" />
+		<entry name="AgentRegister" type="AppInfos" id="TAGENT_ID_MSG_AGENTREGISTER_NEW" />
+		<entry name="createFile" type="createfilereq" id="TAGENT_ID_MSG_FILEUPDATE" />
+		<entry name="fileRequest" type="filerequest" id="TAGENT_ID_MSG_FILEREQUEST" />
+		<entry name="filePush" type="filepush" id="TAGENT_ID_MSG_FILEPUSH" />
+		<entry name="fileReport" type="fileReport" id="TAGENT_ID_MSG_FILEREPORT" />
+		<entry name="innermngRes" type="tagentprotoinnermng" id="TAGENT_ID_MSG_INNERMNG" />
+		<entry name="modaddreq" type="tagentmodaddreq" version="1" id="TAGENT_ID_MSG_MOD_ADD_REQ" />
+		<entry name="modaddres" type="int" version="1" id="TAGENT_ID_MSG_MOD_ADD_RES" />
+		<entry name="moddelreq" type="tagentmoddelreq" version="1" id="TAGENT_ID_MSG_MOD_DEL_REQ" />
+		<entry name="moddelres" type="int" version="1" id="TAGENT_ID_MSG_MOD_DEL_RES" />
+		<entry name="modlistreq" type="int" version="1" id="TAGENT_ID_MSG_MOD_LIST_REQ" />
+		<entry name="modlistres" type="tagentmodlistres" version="1" id="TAGENT_ID_MSG_MOD_LIST_RES" />
+		<entry name="ping" type="uint" id="TAGENT_ID_MSG_PING" />
+		<entry name="pong" type="uint" id="TAGENT_ID_MSG_PONG" />
+		<entry name="Session" type="uint" id="TAGENT_ID_MSG_LIST_AGENT_REQ" />
+		<entry name="listAgentRes" type="listAgentRes" version="1" id="TAGENT_ID_MSG_LIST_AGENT_RES" />
+	</union>
+
+	<struct name="TAGENTCENTERDMSG" version="0" versionindicator="head.msgVer" sizeinfo="head.len" >
+		<entry name="head" type="tagentpkghead" />
+		<entry name="body" type="tagentcenterdmsgbody" select="head.msgCmd" />
+	</struct>
+
+</metalib>
