@@ -19,10 +19,6 @@ log/
 tbus.log
 tbus_channels_*.bak
 
-# ---- tapp 运行时生成 ----
-*_rundata_timer.xml
-*_tagents.xml
-
 # ---- Office/Word 临时文件 ----
 ~$*
 

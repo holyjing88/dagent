@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="GBK" standalone="yes" ?>
+<tagents version="0">
+    <Count>2 </Count>
+    <tagent type="tagent">
+        <tagentipcf type="tagentipcf">
+            <Hostname>localhost.localdomain</Hostname>
+            <EthConn>127.0.0.1</EthConn>
+            <Count>2 </Count>
+            <EthList>192.168.75.128</EthList>
+            <EthList>192.168.122.1</EthList>
+        </tagentipcf>
+        <Count>2 </Count>
+        <appInfo type="AppInfo">
+            <Appid>2 </Appid>
+            <Busid>0 </Busid>
+        </appInfo>
+        <appInfo type="AppInfo">
+            <Appid>255 </Appid>
+            <Busid>0 </Busid>
+        </appInfo>
+        <msgVer>0x1 </msgVer>
+    </tagent>
+    <tagent type="tagent">
+        <tagentipcf type="tagentipcf">
+            <Hostname>localhost.localdomain</Hostname>
+            <EthConn>192.168.75.128</EthConn>
+            <Count>2 </Count>
+            <EthList>192.168.75.128</EthList>
+            <EthList>192.168.122.1</EthList>
+        </tagentipcf>
+        <Count>2 </Count>
+        <appInfo type="AppInfo">
+            <Appid>4 </Appid>
+            <Busid>0 </Busid>
+        </appInfo>
+        <appInfo type="AppInfo">
+            <Appid>2 </Appid>
+            <Busid>0 </Busid>
+        </appInfo>
+        <msgVer>0x1 </msgVer>
+    </tagent>
+</tagents>
